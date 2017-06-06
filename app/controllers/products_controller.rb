@@ -21,15 +21,18 @@ class ProductsController < ApplicationController
     Product.create(product_params)
     redirect_to products_path
   end
-
+  #  earoute and action and set
+  #  products#show to render JSON or HTML depending on the format of the request.
   def show
     @product = Product.find(params[:id])
+    respond_to do |format|
+      format.html { render :show }
+      format.json { render json: @product.to_json(only: [:id, :name, :description, :inventory, :price])}
+    end
   end
+  #  Replace using ProductSerializer with using to_json to serialize the Product.
+  #  Only include the product id, name, description, inventory and price in the JSON response.
 
-  def data
-    product = Product.find(params[:id])
-    render json: ProductSerializer.serialize(product)
-  end
 
   private
 
